@@ -1,5 +1,4 @@
 scikit-image==0.18.3
-scikit-learn-intelex==2021.20220215.133143
 plotly==5.18.0
 matplotlib==3.5.1
 streamlit==1.23.1
