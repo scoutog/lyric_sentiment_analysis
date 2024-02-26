@@ -3,7 +3,6 @@ import streamlit as st
 import datetime as dt
 from itertools import cycle
 import numpy as np
-import plotly.figure_factory as ff
 import plotly.express as px
 from sklearn.preprocessing import MinMaxScaler
 
@@ -24,7 +23,6 @@ albums = albums.sort_values(by=['year'], ascending = True).reset_index(drop=True
 
 # st.title(":red[Mac] :orange[Miller] :green[Sentiment] :blue[Analysis]")
 st.title("Mac Miller Sentiment Analysis")
-st.write("")
 
 # Create a container for the content
 with st.expander("**Discography**", expanded=True):
