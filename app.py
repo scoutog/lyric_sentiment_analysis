@@ -6,8 +6,20 @@ from sklearn.preprocessing import MinMaxScaler
 
 def do_stuff_on_page_load():
     st.set_page_config(layout="wide", page_title="Sentimental Lyrics",
-                      page_icon="🎵")
+                      page_icon="📻")
 do_stuff_on_page_load()  
+
+# st.markdown(
+#             f'''
+#             <style>
+#                 .reportview-container .sidebar-content {{
+#                     padding-top: {1}rem;
+#                 }}
+#                 .reportview-container .main .block-container {{
+#                     padding-top: {1}rem;
+#                 }}
+#             </style>
+#             ''',unsafe_allow_html=True)
 
 albums = pd.read_csv(f"data/MM_Albums_sentiment.csv")
 songs = pd.read_csv(f"data/MM_AllSongs_sentiment.csv")
@@ -21,8 +33,10 @@ albums = albums.sort_values(by=['year'], ascending = True).reset_index(drop=True
 top_3 = albums.sort_values(by='Compound_Score', ascending=False).iloc[:3,:].reset_index(drop=True)
 bottom_3 = albums.sort_values(by='Compound_Score', ascending=True).iloc[:3,:].reset_index(drop=True)
 
-###############################
-st.title("Mac Miller Sentiment Analysis")
+##############################
+option = st.selectbox(label = "",
+    options = (['Mac Miller']), index = 0)
+st.title(f"{option} Sentiment Analysis")
 st.divider()
 ###############################
 idx = 0 
