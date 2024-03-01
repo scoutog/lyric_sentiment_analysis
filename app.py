@@ -178,5 +178,14 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-    
+
+###############################
+st.divider()
+with st.expander("**Enhancements**", expanded=False):
+    st.markdown('''
+
+    - Generalize to allow input of artist
+    - Track the number of words per album
+    - Single metric for unique word count
+    ''')
     
