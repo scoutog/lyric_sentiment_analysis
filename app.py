@@ -9,18 +9,6 @@ def do_stuff_on_page_load():
                       page_icon="📻")
 do_stuff_on_page_load()  
 
-# st.markdown(
-#             f'''
-#             <style>
-#                 .reportview-container .sidebar-content {{
-#                     padding-top: {1}rem;
-#                 }}
-#                 .reportview-container .main .block-container {{
-#                     padding-top: {1}rem;
-#                 }}
-#             </style>
-#             ''',unsafe_allow_html=True)
-
 albums = pd.read_csv(f"data/MM_Albums_sentiment.csv")
 songs = pd.read_csv(f"data/MM_AllSongs_sentiment.csv")
 songs['release_date'] = pd.to_datetime(songs['release_date'])
@@ -164,6 +152,19 @@ with st.expander("**Discography**", expanded=False):
     for idx, filteredImage in enumerate(filteredImages):
         next(cols).image(filteredImage, caption=caption[idx])
 
+
+###############################
+with st.expander("**Enhancements**", expanded=False):
+    st.markdown('''
+
+    - Generalize to allow input of artist
+    - Track the number of words per album
+    - Single metric for unique word count
+    ''')
+    st.write("")
+    
+###############################
+# Markdown additions
 st.markdown(
     """
     <style>
@@ -178,14 +179,4 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-###############################
-st.divider()
-with st.expander("**Enhancements**", expanded=False):
-    st.markdown('''
-
-    - Generalize to allow input of artist
-    - Track the number of words per album
-    - Single metric for unique word count
-    ''')
     
