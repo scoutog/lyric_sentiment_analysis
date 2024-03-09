@@ -105,7 +105,7 @@ def show_top_and_bottom_3(top_3, bottom_3):
     #End
 
 def sentiment_change_over_time(albums):
-    caption = '''You can see the density of content released in the early part of his career that begins with positivity and happiness but ends with negative sentiment. That is followed by decreased output and a progression back toward happiness.'''
+    caption = '''You can see the density of content released in the early part of his career that begins with positivity but ends with a sharp downturn. That is followed by decreased output and a progression back toward stability.'''
 
     x = albums.copy()
     x.set_index('year', inplace=True)
@@ -123,7 +123,7 @@ def sentiment_change_over_time(albums):
     )
 
     fig.update_layout(
-        yaxis_title=None,
+        yaxis_title='Sentiment',
         xaxis_title=None,
         title = "Sentiment Change over Time",
         yaxis=dict(showline=False, zeroline=False), 
@@ -150,7 +150,7 @@ def sentiment_change_over_albums(albums):
     )
 
     fig.update_layout(
-        yaxis_title=None,
+        yaxis_title='Sentiment',
         xaxis_title=None,
         title = 'Sentiment Change by Album',
         yaxis=dict(showline=False, zeroline=False), 
@@ -175,21 +175,34 @@ def generate_wordcloud(albums, option):
         # Display the generated image:
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
-        plt.show()
+#         plt.show()
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot()
     #End
 
 def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths):
-    col1, col2, col3, col4, col5, col6, col7 = st.columns([3,1,3,1,3,1,3])
-    col1.subheader("Original Album Art")
-    col3.subheader("AI Personification")
+    column_sizing = [3,1,6,1,6,1,6,1,3]
+    col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
+    
+    col0.subheader("Themes")
+    col1.subheader("Album Art")
+    col3.subheader("Personification")
     col5.subheader("AI Art")
-    col7.subheader("Listening Place")
+    col7.subheader("Where to Listen")
 
     for album in albums['album'].unique():
-        col1, col2, col3, col4, col5, col6, col7 = st.columns([3,1,3,1,3,1,3])
+        col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
 
+        theme = albums_dalle[albums_dalle['album']==album]['album_theme'].item()
+        theme = theme.replace(".","")
+#         theme = theme.replace(",","\n")
+        
+        col0.write("")
+        col0.write("")
+        col0.write("")
+        col0.write("")
+        col0.write(f"{theme}")
+        
         col1.image(albums[albums['album']==album]['art'].item(), caption = album)
 
         matching = [s for s in persona_file_paths if album in s]
