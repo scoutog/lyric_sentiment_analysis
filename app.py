@@ -27,12 +27,12 @@ sentiment_change_over_albums(albums)
 st.divider()
 
 # Show Dall-E Generations
-albums_and_Dalle(albums, persona_file_paths, ai_img_file_paths)
+albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths)
 
 # Generate wordclouds
 with st.expander("**WordClouds**", expanded=True):
     option = st.selectbox(label = "Pick an album:",
-        options = (albums['album'].unique()), index = 0)
+        options = (albums['album'].unique()), index = 7)
     generate_wordcloud(albums, option)
 
 # List enhancements
@@ -44,5 +44,3 @@ with st.expander("**Enhancements**", expanded=False):
     - Single metric for unique word count
     ''')
     st.write("")
-
-##########################

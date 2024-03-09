@@ -112,7 +112,7 @@ def sentiment_change_over_time(albums):
     plot = x.copy()
     plot = plot[['score','album']]
     plot['score'] = round(plot['score'].astype(float),1)
-    fig = px.scatter(plot, title=None, text='album', trendline = 'lowess') # trendline="lowess", 
+    fig = px.scatter(plot, title=None, text='album') # trendline="lowess", 
 
     fig.update_traces(
         textposition='bottom center',
@@ -180,27 +180,34 @@ def generate_wordcloud(albums, option):
         st.pyplot()
     #End
 
-def albums_and_Dalle(albums, persona_file_paths, ai_img_file_paths):
-    col1, col2, col3, col4, col5 = st.columns([3,1,3,1,3])
-    
+def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths):
+    col1, col2, col3, col4, col5, col6, col7 = st.columns([3,1,3,1,3,1,3])
     col1.subheader("Original Album Art")
+    col3.subheader("AI Personification")
+    col5.subheader("AI Art")
+    col7.subheader("Listening Place")
+
     for album in albums['album'].unique():
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([3,1,3,1,3,1,3])
+
         col1.image(albums[albums['album']==album]['art'].item(), caption = album)
 
-    col2.write()
-    
-    col3.subheader("AI Personification")
-    for album in albums['album'].unique():
         matching = [s for s in persona_file_paths if album in s]
         if len(matching) != 1:
             matching = matching[1]
         col3.image(matching, caption = album)
-        
-    col4.write()
-    
-    col5.subheader("AI Art")
-    for album in albums['album'].unique():
+
         matching = [s for s in ai_img_file_paths if album in s]
         if len(matching) != 1:
             matching = matching[1]
         col5.image(matching, caption = album)
+
+        listening_place = albums_dalle[albums_dalle['album']==album]['album_summary'].item()
+        listening_place = listening_place.replace("The ideal place to listen to this record would be: ","")
+        listening_place = listening_place.replace(".","")
+
+        col7.write("")
+        col7.write("")
+        col7.write("")
+        col7.write("")
+        col7.write(f"{listening_place}")
