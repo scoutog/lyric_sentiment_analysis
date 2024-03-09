@@ -9,4 +9,3 @@ fastai==2.7.12
 dataclasses==0.6
 openai
 wordcloud
-os
