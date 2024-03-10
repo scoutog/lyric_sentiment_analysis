@@ -106,7 +106,7 @@ def show_top_and_bottom_3(top_3, bottom_3):
     #End
 
 def sentiment_change_over_time(albums):
-    caption = '''*You can see the density of content released in the early part of his career that begins with positivity but ends with a sharp downturn. That is followed by decreased output and a progression back toward stability.*'''
+    caption = '''*Early in his career, there's a burst of content released marked by positivity, but it takes a nosedive towards the 2013. This is then followed by less decreased content output and a journey back to stability.*'''
 
     x = albums.copy()
     x.set_index('year', inplace=True)
@@ -137,7 +137,7 @@ def sentiment_change_over_time(albums):
     #End
 
 def sentiment_change_over_albums(albums):
-    caption = '''*When you remove the temporal component and just look at album over album, the trend of starting high, dropping off, and progressing back toward good is even more clear.*'''
+    caption = '''*If you strip away the time factor and focus solely on each album, the pattern of starting strong, experiencing a decline, and then bouncing back towards positive vibes becomes even more evident.*'''
 
     plot = albums.copy()
     plot = plot.sort_values(by=['release_date']).reset_index(drop=True)
@@ -256,7 +256,7 @@ def by_album_chart(songs, option):
     
 ####
 def death_mentions(albums, songs, album_death_counter):
-    caption = '''*The trend you can see here is what prompted me to start this analysis. Something a lot of fans talk about is how Mac Miller was transparent about his struggles and growth through his music. You'll see further analysis diving into the change in sentiment but here we can see how Mac Miller talks about death over time. It starts off minimal and then becomes a main topic of his music. You see the trend start to go away and sentiment start to rise again.*'''
+    caption = '''*The trend you can see here is what prompted me to start this analysis. Mac Miller gained fans by being real about his own ups and downs with coming of age, drugs and depression in his music. As we go deeper into the analysis, we'll see how the vibe in his songs changed over time, especially when it comes to talking about death. At first, death mentions are minimal, but then it becomes a major theme. Eventually, you'll see that trend fading away, and the mood getting more positive again.*'''
     
     num_songs = songs.groupby(['album']).agg(num_songs = ("track_no","max")).reset_index()
     death_adj = album_death_counter.merge(num_songs)
