@@ -19,6 +19,8 @@ with st.expander("**Discography**", expanded=False):
 show_top_and_bottom_3(top_3, bottom_3)
 
 # Show analysis
+# Death mention bar chart
+death_mentions(albums, songs, album_death_counter)
 
 # Show sentiment change over time
 sentiment_change_over_time(albums)
@@ -29,9 +31,6 @@ sentiment_change_over_albums(albums)
 #     option = st.selectbox(label = "Pick an album:",
 #         options = (albums['album'].unique()), index = 0)
 #     by_album_chart(songs, option)
-
-# Death mention bar chart
-death_mentions(albums, album_death_counter)
 
 # Show Dall-E Generations
 with st.expander("**What does AI Think?**", expanded=True):

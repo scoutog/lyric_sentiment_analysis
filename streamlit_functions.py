@@ -255,16 +255,24 @@ def by_album_chart(songs, option):
     st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
     
 ####
-def death_mentions(albums, album_death_counter):
-    caption = '''As mentions as death increase, sentiment decreases. Weighted death mentions would be useful here.'''
+def death_mentions(albums, songs, album_death_counter):
+    caption = '''As mentions of death increase, sentiment decreases. 
+    The WMWTSO to GOOD AM run is really interesting.'''
+    
+    num_songs = songs.groupby(['album']).agg(num_songs = ("track_no","max")).reset_index()
+    death_adj = album_death_counter.merge(num_songs)
+    death_adj['death_counter'] = death_adj['death_counter'] / death_adj['num_songs']
+    album_death_counter = death_adj[['album','death_counter']].reset_index(drop=True)
+    album_death_counter['death_counter'] = round(album_death_counter['death_counter'],1)
+    
     
     x = album_death_counter.merge(albums[['album', 'release_date', 'score']], 
                                   on=['album']).sort_values(by= ['release_date']).reset_index(drop=True)
     
     x.set_index('album', inplace=True)
     plot = x.copy()
-    fig = px.bar(plot, x=plot.index, y='death_counter', title="Death Mentions by Album", text=plot.index, 
-                 hover_data=[plot.index, 'death_counter'], color='score') # trendline="lowess", 
+    fig = px.bar(plot, x=plot.index, y='death_counter', title="Average Death Mentions by Album", text=plot.index, 
+                 hover_data=[plot.index, 'death_counter'], color='score', color_continuous_scale=["red", "blue", "green"]) 
 
     fig.update_traces(
         textposition='outside',
