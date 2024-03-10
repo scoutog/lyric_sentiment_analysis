@@ -91,8 +91,8 @@ def show_top_and_bottom_3(top_3, bottom_3):
     caption = top_3caption + filler_ls + bottom_3caption
 
     col1, col2 = st.columns([4,3])
-    col1.subheader("Top 3 Positive Albums")
-    col2.subheader("Top 3 Negative Albums")
+    col1.subheader("Most Positive Albums")
+    col2.subheader("Most Negative Albums")
 
     cols = cycle(st.columns(7))
     for idx, filteredImage in enumerate(filteredImages):
@@ -106,7 +106,7 @@ def show_top_and_bottom_3(top_3, bottom_3):
     #End
 
 def sentiment_change_over_time(albums):
-    caption = '''You can see the density of content released in the early part of his career that begins with positivity but ends with a sharp downturn. That is followed by decreased output and a progression back toward stability.'''
+    caption = '''*You can see the density of content released in the early part of his career that begins with positivity but ends with a sharp downturn. That is followed by decreased output and a progression back toward stability.*'''
 
     x = albums.copy()
     x.set_index('year', inplace=True)
@@ -137,7 +137,7 @@ def sentiment_change_over_time(albums):
     #End
 
 def sentiment_change_over_albums(albums):
-    caption = '''When you remove the temporal component and just look at album over album, the trend of starting high, dropping off, and progressing back toward good is even more clear.'''
+    caption = '''*When you remove the temporal component and just look at album over album, the trend of starting high, dropping off, and progressing back toward good is even more clear.*'''
 
     plot = albums.copy()
     plot = plot.sort_values(by=['release_date']).reset_index(drop=True)
@@ -256,8 +256,7 @@ def by_album_chart(songs, option):
     
 ####
 def death_mentions(albums, songs, album_death_counter):
-    caption = '''As mentions of death increase, sentiment decreases. 
-    The WMWTSO to GOOD AM run is really interesting.'''
+    caption = '''*The trend you can see here is what prompted me to start this analysis. Something a lot of fans talk about is how Mac Miller was transparent about his struggles and growth through his music. You'll see further analysis diving into the change in sentiment but here we can see how Mac Miller talks about death over time. It starts off minimal and then becomes a main topic of his music. You see the trend start to go away and sentiment start to rise again.*'''
     
     num_songs = songs.groupby(['album']).agg(num_songs = ("track_no","max")).reset_index()
     death_adj = album_death_counter.merge(num_songs)
