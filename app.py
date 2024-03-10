@@ -2,7 +2,7 @@ from streamlit_functions import *
 
 # On load
 do_stuff_on_page_load()  
-albums, songs, top_3, bottom_3, albums_dalle = import_data()
+albums, songs, top_3, bottom_3, albums_dalle, album_death_counter = import_data()
 persona_file_paths, ai_img_file_paths = generate_file_paths()
 
 # Choose the artist and change the title
@@ -17,26 +17,34 @@ with st.expander("**Discography**", expanded=False):
 
 # Show the top 3 and bottom 3 in one row
 show_top_and_bottom_3(top_3, bottom_3)
- 
+
+# Show analysis
+
 # Show sentiment change over time
 sentiment_change_over_time(albums)
 
 # Show sentiment change over albums
 sentiment_change_over_albums(albums)
 
-st.divider()
+#     option = st.selectbox(label = "Pick an album:",
+#         options = (albums['album'].unique()), index = 0)
+#     by_album_chart(songs, option)
+
+# Death mention bar chart
+death_mentions(albums, album_death_counter)
 
 # Show Dall-E Generations
-albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths)
+with st.expander("**What does AI Think?**", expanded=True):
+    albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths)
 
 # Generate wordclouds
-with st.expander("**WordClouds**", expanded=True):
-    option = st.selectbox(label = "Pick an album:",
-        options = (albums['album'].unique()), index = 7)
-    generate_wordcloud(albums, option)
+# with st.expander("**WordClouds**", expanded=True):
+#     option = st.selectbox(label = "Pick an album:",
+#         options = (albums['album'].unique()), index = 7)
+#     generate_wordcloud(albums, option)
 
 # List enhancements
-with st.expander("**Enhancements**", expanded=False):
+with st.expander("**Things I Want to Add**", expanded=False):
     st.markdown('''
 
     - Generalize to allow input of artist

@@ -49,6 +49,7 @@ def import_data():
     albums = pd.read_csv(f"data/MM_Albums_sentiment.csv")
     songs = pd.read_csv(f"data/MM_AllSongs_sentiment.csv")
     albums_dalle = pd.read_csv("data/MM_Albums_sentiment_with_DallE.csv")
+    album_death_counter = pd.read_csv("data/album_death_counter.csv")
 
     albums['release_date'] = pd.to_datetime(albums['release_date'])
     songs['release_date'] = pd.to_datetime(songs['release_date'])
@@ -59,7 +60,7 @@ def import_data():
     top_3 = albums.sort_values(by='score', ascending=False).iloc[:3,:].reset_index(drop=True)
     bottom_3 = albums.sort_values(by='score', ascending=True).iloc[:3,:].reset_index(drop=True)
     
-    return albums, songs, top_3, bottom_3, albums_dalle
+    return albums, songs, top_3, bottom_3, albums_dalle, album_death_counter
 
 def show_discography(df):
     idx = 0 
@@ -224,3 +225,60 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
         col7.write("")
         col7.write("")
         col7.write(f"{listening_place}")
+        
+def by_album_chart(songs, option):
+#     option = 'K.I.D.S.'
+    x = songs[songs['album'] == option].reset_index(drop=True)
+    x.set_index('track_no', inplace=True)
+    plot = x.copy()
+    plot = plot[['score','title']]
+    plot['score'] = round(plot['score'].astype(float),1)
+    fig = px.scatter(plot, x=plot['title'], y=plot['score'], title=None) # trendline="lowess",
+
+    fig.update_traces(
+        textposition='bottom center',
+        showlegend=False,
+        line=dict(color='green'),  #dict(color='rgba(255, 0, 0, 0.5)'
+        marker=dict(color='orange'),  # Set the color of scatter points
+        hovertemplate='<b>%{text}</b><br>Score: %{y}<extra></extra>'  # Customize hover text
+    )
+
+    fig.update_layout(
+        yaxis_title='Sentiment',
+        xaxis_title=None,
+        title = "Sentiment Change over Time",
+        yaxis=dict(showline=False, zeroline=False), 
+        xaxis=dict(showgrid=False)  # Hide horizontal axis lines
+    )
+
+    # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
+    
+####
+def death_mentions(albums, album_death_counter):
+    caption = '''As mentions as death increase, sentiment decreases. Weighted death mentions would be useful here.'''
+    
+    x = album_death_counter.merge(albums[['album', 'release_date', 'score']], 
+                                  on=['album']).sort_values(by= ['release_date']).reset_index(drop=True)
+    
+    x.set_index('album', inplace=True)
+    plot = x.copy()
+    fig = px.bar(plot, x=plot.index, y='death_counter', title="Death Mentions by Album", text=plot.index, 
+                 hover_data=[plot.index, 'death_counter'], color='score') # trendline="lowess", 
+
+    fig.update_traces(
+        textposition='outside',
+        showlegend=False,
+        hovertemplate='<b>%{text}</b><br>Death Mentions: %{y}<extra></extra>'  # Customize hover text
+    )
+
+    fig.update_layout(
+        yaxis_title='Times Mentioned',
+        yaxis_visible=False, xaxis_showticklabels=False,
+        xaxis_title = None
+#         title = "Sentiment Change over Time",
+    )
+
+    # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
+    st.write(caption)
