@@ -106,7 +106,7 @@ def show_top_and_bottom_3(top_3, bottom_3):
     #End
 
 def sentiment_change_over_time(albums, col1):
-    caption = '''*Early in his career, there's a burst of content released marked by positivity, but it takes a nosedive towards the 2013. This is then followed by less decreased content output and a journey back to stability.*'''
+    caption = '''Early in his career, there's a burst of content released marked by positivity, but it takes a nosedive towards the 2013. This is then followed by less decreased content output and a journey back to stability.'''
 
     x = albums.copy()
     x.set_index('year', inplace=True)
@@ -124,7 +124,7 @@ def sentiment_change_over_time(albums, col1):
     )
 
     fig.update_layout(
-        yaxis_title='Positivity to Negativity Score',
+        yaxis_title='Positivity Score',
         xaxis_title=None,
         title = "Sentiment Change over Time",
         yaxis=dict(showline=False, zeroline=False), 
@@ -133,11 +133,12 @@ def sentiment_change_over_time(albums, col1):
 
     # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
     col1.plotly_chart(fig, theme="streamlit", use_container_width=True) 
-    col1.write(caption)
+#     col1.write(caption)
+    col1.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
     #End
 
 def sentiment_change_over_albums(albums, col2):
-    caption = '''*If you strip away the time factor and focus solely on each album, the pattern of starting strong, experiencing a decline, and then bouncing back towards positive vibes becomes even more evident.*'''
+    caption = '''If you strip away the time factor and focus solely on each album, the pattern of starting strong, experiencing a decline, and then bouncing back towards positive vibes becomes even more evident.'''
 
     plot = albums.copy()
     plot = plot.sort_values(by=['release_date']).reset_index(drop=True)
@@ -162,7 +163,8 @@ def sentiment_change_over_albums(albums, col2):
 
     # Use the Streamlit theme.
     col2.plotly_chart(fig, theme="streamlit", use_container_width=True) 
-    col2.write(caption)
+#     col2.write(caption)
+    col2.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
     #End
     
 def generate_wordcloud(albums, option):
@@ -187,11 +189,11 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
     column_sizing = [3,1,6,1,6,1,6,1,3]
     col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
     
-    col0.subheader("Themes")
-    col1.subheader("Album Art")
-    col3.subheader("Personification")
-    col5.subheader("AI Art")
-    col7.subheader("Where to Listen")
+    col0.markdown(f'**<u><div style="text-align: center;">Themes</div></u>**', unsafe_allow_html=True)
+    col1.markdown(f'**<u><div style="text-align: center;">Album Art</div></u>**', unsafe_allow_html=True)
+    col3.markdown(f'**<u><div style="text-align: center;">Personification</div></u>**', unsafe_allow_html=True)
+    col5.markdown(f'**<u><div style="text-align: center;">AI Art</div></u>**', unsafe_allow_html=True)
+    col7.markdown(f'**<u><div style="text-align: center;">Where to Listen</div></u>**', unsafe_allow_html=True)
 
     for album in albums['album'].unique():
         col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
@@ -204,7 +206,7 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
         col0.write("")
         col0.write("")
         col0.write("")
-        col0.write(f"{theme}")
+        col0.markdown(f'<div style="text-align: center;">{theme}</div>', unsafe_allow_html=True)
         
         col1.image(albums[albums['album']==album]['art'].item(), caption = album)
 
@@ -226,7 +228,7 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
         col7.write("")
         col7.write("")
         col7.write("")
-        col7.write(f"{listening_place}")
+        col7.markdown(f'<div style="text-align: center;">{listening_place}</div>', unsafe_allow_html=True)
         
 def by_album_chart(songs, option):
 #     option = 'K.I.D.S.'
@@ -258,7 +260,7 @@ def by_album_chart(songs, option):
     
 ####
 def death_mentions(albums, songs, album_death_counter):
-    caption = '''*The trend you can see here is what prompted me to start this analysis. Mac Miller gained fans by being real about his own ups and downs with coming of age, drugs and depression in his music. As we go deeper into the analysis, we'll see how the vibe in his songs changed over time, especially when it comes to talking about death. At first, death mentions are minimal, but then it becomes a major theme. Eventually, you'll see that trend fading away, and the mood getting more positive again.*'''
+    caption = '''The trend you can see here is what prompted me to start this analysis. Mac Miller gained fans by being real about his own ups and downs with coming of age, drugs and depression in his music. As we go deeper into the analysis, we'll see how the vibe in his songs changed over time, especially when it comes to talking about death. At first, death mentions are minimal, but then it becomes a major theme. Eventually, you'll see that trend fading away, and the mood getting more positive again.'''
     
     num_songs = songs.groupby(['album']).agg(num_songs = ("track_no","max")).reset_index()
     death_adj = album_death_counter.merge(num_songs)
@@ -273,7 +275,7 @@ def death_mentions(albums, songs, album_death_counter):
     x.set_index('album', inplace=True)
     plot = x.copy()
     fig = px.bar(plot, x=plot.index, y='death_counter', title="Average Death Mentions by Album", text=plot.index, 
-                 hover_data=[plot.index, 'death_counter'], color='score', color_continuous_scale=["red", "blue", "green"]) 
+                 hover_data=[plot.index, 'death_counter'], color='death_counter', color_continuous_scale=["green", "blue", "red"]) 
 
     fig.update_traces(
         textposition='outside',
@@ -287,7 +289,8 @@ def death_mentions(albums, songs, album_death_counter):
         xaxis_title = None
 #         title = "Sentiment Change over Time",
     )
+    fig.update_coloraxes(showscale=False)
 
     # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
     st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
-    st.write(caption)
+    st.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)

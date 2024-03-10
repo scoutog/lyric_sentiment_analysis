@@ -8,7 +8,9 @@ persona_file_paths, ai_img_file_paths = generate_file_paths()
 # Choose the artist and change the title
 # option = st.selectbox(label = "", options = (['Mac Miller']), index = 0)
 option = 'Mac Miller'
-st.title(f"{option} Sentiment Analysis")
+st.header("Mac Miller's Musical Evolution")
+st.write(f"*A Sentimental Journey through Life, Death, and Redemption*")
+st.caption("Powered by GPT-3.5 and Streamlit")
 # album_banner(albums)
 
 # Show discography within a container
@@ -22,12 +24,15 @@ show_top_and_bottom_3(top_3, bottom_3)
 # Death mention bar chart
 death_mentions(albums, songs, album_death_counter)
 st.write(" ")
+st.write(" ")
 
 # Show sentiment change over time
 col1, col2 = st.columns([1,1])
 sentiment_change_over_time(albums, col1)
 # Show sentiment change over albums
 sentiment_change_over_albums(albums, col2)
+st.write(" ")
+st.write(" ")
 
 #     option = st.selectbox(label = "Pick an album:",
 #         options = (albums['album'].unique()), index = 0)
