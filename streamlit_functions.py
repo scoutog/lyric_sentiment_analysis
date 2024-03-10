@@ -105,7 +105,7 @@ def show_top_and_bottom_3(top_3, bottom_3):
             col.image(filteredImage, caption=(f"#{idx+1} {caption[idx]}"))  
     #End
 
-def sentiment_change_over_time(albums):
+def sentiment_change_over_time(albums, col1):
     caption = '''*Early in his career, there's a burst of content released marked by positivity, but it takes a nosedive towards the 2013. This is then followed by less decreased content output and a journey back to stability.*'''
 
     x = albums.copy()
@@ -118,13 +118,13 @@ def sentiment_change_over_time(albums):
     fig.update_traces(
         textposition='bottom center',
         showlegend=False,
-        line=dict(color='green'),  #dict(color='rgba(255, 0, 0, 0.5)'
-        marker=dict(color='orange'),  # Set the color of scatter points
+#         line=dict(color='green'),  #dict(color='rgba(255, 0, 0, 0.5)'
+        marker=dict(color='cyan'),  # Set the color of scatter points
         hovertemplate='<b>%{text}</b><br>Score: %{y}<extra></extra>'  # Customize hover text
     )
 
     fig.update_layout(
-        yaxis_title='Sentiment',
+        yaxis_title='Positivity to Negativity Score',
         xaxis_title=None,
         title = "Sentiment Change over Time",
         yaxis=dict(showline=False, zeroline=False), 
@@ -132,22 +132,23 @@ def sentiment_change_over_time(albums):
     )
 
     # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
-    st.write(caption)
+    col1.plotly_chart(fig, theme="streamlit", use_container_width=True) 
+    col1.write(caption)
     #End
 
-def sentiment_change_over_albums(albums):
+def sentiment_change_over_albums(albums, col2):
     caption = '''*If you strip away the time factor and focus solely on each album, the pattern of starting strong, experiencing a decline, and then bouncing back towards positive vibes becomes even more evident.*'''
 
     plot = albums.copy()
     plot = plot.sort_values(by=['release_date']).reset_index(drop=True)
     plot = plot.set_index('album')
     plot = plot[['score']]
-    fig = px.line(plot)
+    plot['score'] = round(plot['score'].astype(float),1)
+    fig = px.line(plot, title=None)
 
     fig.update_traces(
         showlegend=False,
-        line=dict(color='orange')
+        line=dict(color='cyan')
     )
 
     fig.update_layout(
@@ -155,12 +156,13 @@ def sentiment_change_over_albums(albums):
         xaxis_title=None,
         title = 'Sentiment Change by Album',
         yaxis=dict(showline=False, zeroline=False), 
+        yaxis_visible=False, #xaxis_showticklabels=False,
         xaxis=dict(showgrid=False)  # Hide horizontal axis lines
     )
 
     # Use the Streamlit theme.
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True) 
-    st.write(caption)
+    col2.plotly_chart(fig, theme="streamlit", use_container_width=True) 
+    col2.write(caption)
     #End
     
 def generate_wordcloud(albums, option):

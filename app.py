@@ -21,12 +21,13 @@ show_top_and_bottom_3(top_3, bottom_3)
 # Show analysis
 # Death mention bar chart
 death_mentions(albums, songs, album_death_counter)
+st.write(" ")
 
 # Show sentiment change over time
-sentiment_change_over_time(albums)
-
+col1, col2 = st.columns([1,1])
+sentiment_change_over_time(albums, col1)
 # Show sentiment change over albums
-sentiment_change_over_albums(albums)
+sentiment_change_over_albums(albums, col2)
 
 #     option = st.selectbox(label = "Pick an album:",
 #         options = (albums['album'].unique()), index = 0)
