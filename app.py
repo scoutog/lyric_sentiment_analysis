@@ -9,8 +9,8 @@ persona_file_paths, ai_img_file_paths = generate_file_paths()
 # option = st.selectbox(label = "", options = (['Mac Miller']), index = 0)
 option = 'Mac Miller'
 st.header("Mac Miller's Musical Evolution")
-st.write(f"A Data-Driven Exploration of Changing Moods Across his Discography")
-st.caption("Powered by GPT-3.5 and Streamlit")
+st.write(f"A Data-Driven Exploration of Changing Sentiment Across his Discography")
+st.caption("Scout Oatman-Gaitan") #Powered by GPT-3.5 and Streamlit
 # album_banner(albums)
 
 # Show discography within a container
@@ -60,3 +60,11 @@ with st.expander("**Things I Want to Add**", expanded=False):
     - Single metric for unique word count
     ''')
     st.write("")
+    
+st.write(" ")
+
+linkedin = "https://www.linkedin.com/in/scout-og/"
+github = "https://github.com/scoutog"
+    
+st.link_button("My LinkedIn", linkedin)
+st.link_button("My GitHub", github)
