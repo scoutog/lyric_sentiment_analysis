@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import os
+from PIL import Image
 
 def do_stuff_on_page_load():
     st.set_page_config(layout="wide", page_title="Sentimental Lyrics", #centered
@@ -54,6 +55,14 @@ def generate_file_paths():
         
     return persona_file_paths, ai_img_file_paths
     #End
+    
+def extract_lyric_strings(strings):
+    result = []
+    for s in strings:
+        index = s.lower().find("lyric")
+        if index != -1:
+            result.append(s[index+25:])  # Add 5 to skip "lyric"
+    return result
     
 def import_data():
     albums = pd.read_csv(f"data/MM_Albums_sentiment.csv")
@@ -196,9 +205,11 @@ def generate_wordcloud(albums, option):
     #End
 
 def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths):
-    prefix_to_remove = "C:\\Users\\Scout\\Documents\\GitHub\\lyric_sentiment_analysis"
-
-    ai_img_file_paths = [path.replace(prefix_to_remove, "").lstrip('/\\') for path in ai_img_file_paths]
+    
+    ai_img_file_paths = extract_lyric_strings(ai_img_file_paths)
+    
+#     cwd = os.getcwd()
+#     ai_img_file_paths = [os.path.join(cwd, s) for s in ai_img_file_paths]
     
     column_sizing = [4,1,4,1,4,1,4]
     col0,col01, col1, col2, col3, col4, col5 = st.columns(column_sizing)
@@ -226,10 +237,6 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
         
         col0.image(albums[albums['album']==album]['art'].item(), caption = album)
 
-#         matching = [s for s in ai_img_file_paths if album in s]
-#         if len(matching) != 1:
-#             matching = matching[1]
-
         if album == 'GO:OD AM ':
             matching = [ai_img_file_paths[5]]
         else:
@@ -240,13 +247,8 @@ def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths
             
         matching = matching[0]
 
-    
-        col1.image(matching, caption = album)
-
-#         matching = [s for s in ai_img_file_paths if album in s]
-#         if len(matching) != 1:
-#             matching = matching[1]
-#         col7.image(matching, caption = album)
+        image = Image.open(matching)
+        col1.image(image, caption = album)
 
         listening_place = albums_dalle[albums_dalle['album']==album]['album_summary'].item()
         listening_place = listening_place.replace("The ideal place to listen to this record would be: ","")
