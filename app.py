@@ -9,7 +9,7 @@ persona_file_paths, ai_img_file_paths = generate_file_paths()
 # option = st.selectbox(label = "", options = (['Mac Miller']), index = 0)
 option = 'Mac Miller'
 st.header("Mac Miller's Musical Evolution")
-st.write(f"A Data-Driven Exploration of Changing Sentiment Across his Discography")
+st.write(f"A Data-Driven Exploration of Changing Sentiment over the Discography")
 st.caption("Powered by GPT-3.5 and Streamlit")
 # album_banner(albums)
 
