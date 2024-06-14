@@ -138,7 +138,7 @@ def sentiment_change_over_time(albums, col1):
         textposition='bottom center',
         showlegend=False,
 #         line=dict(color='green'),  #dict(color='rgba(255, 0, 0, 0.5)'
-        marker=dict(color='blue'),  # Set the color of scatter points
+        marker=dict(color='orange'),  # Set the color of scatter points
         hovertemplate='<b>%{text}</b><br>Score: %{y}<extra></extra>'  # Customize hover text
     )
 
@@ -168,7 +168,7 @@ def sentiment_change_over_albums(albums, col2):
 
     fig.update_traces(
         showlegend=False,
-        line=dict(color='blue')
+        line=dict(color='orange')
     )
 
     fig.update_layout(
