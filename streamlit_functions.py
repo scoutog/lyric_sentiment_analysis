@@ -18,11 +18,21 @@ def do_stuff_on_page_load():
         </style>
         """,unsafe_allow_html=True,
     )
+    
+    dark = '''
+    <style>
+        .stApp {
+        background-color: dark-gray;
+        }
+    </style>
+    '''
+    
+    st.markdown(dark, unsafe_allow_html=True)
     #End
     
 def generate_file_paths():
     persona_dir_path = f'{os.getcwd()}/data/persona_img/'
-    ai_img_dir_path = f'{os.getcwd()}/data/ai_img/'
+    ai_img_dir_path = f'{os.getcwd()}/data/ai_art/'
 
     res = []
     for path in os.listdir(persona_dir_path):
@@ -91,8 +101,8 @@ def show_top_and_bottom_3(top_3, bottom_3):
     caption = top_3caption + filler_ls + bottom_3caption
 
     col1, col2 = st.columns([4,3])
-    col1.subheader("Most Positive Albums")
-    col2.subheader("Most Negative Albums")
+    col1.subheader("Albums with Most Positive Tone")
+    col2.subheader("Albums with Most Negative Tone")
 
     cols = cycle(st.columns(7))
     for idx, filteredImage in enumerate(filteredImages):
@@ -134,7 +144,7 @@ def sentiment_change_over_time(albums, col1):
     # st.markdown("<h3 style='text-align: center; '>Sentiment over Time</h3>", unsafe_allow_html=True)
     col1.plotly_chart(fig, theme="streamlit", use_container_width=True) 
 #     col1.write(caption)
-    col1.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
+#     col1.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
     #End
 
 def sentiment_change_over_albums(albums, col2):
@@ -164,7 +174,7 @@ def sentiment_change_over_albums(albums, col2):
     # Use the Streamlit theme.
     col2.plotly_chart(fig, theme="streamlit", use_container_width=True) 
 #     col2.write(caption)
-    col2.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
+#     col2.markdown(f'<div style="text-align: justify;">{caption}</div>', unsafe_allow_html=True)
     #End
     
 def generate_wordcloud(albums, option):
@@ -186,49 +196,69 @@ def generate_wordcloud(albums, option):
     #End
 
 def albums_and_Dalle(albums, albums_dalle, persona_file_paths, ai_img_file_paths):
-    column_sizing = [3,1,6,1,6,1,6,1,3]
-    col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
+    prefix_to_remove = "C:\\Users\\Scout\\Documents\\GitHub\\lyric_sentiment_analysis"
+
+    ai_img_file_paths = [path.replace(prefix_to_remove, "").lstrip('/\\') for path in ai_img_file_paths]
     
-    col0.markdown(f'**<u><div style="text-align: center;">Themes</div></u>**', unsafe_allow_html=True)
-    col1.markdown(f'**<u><div style="text-align: center;">Album Art</div></u>**', unsafe_allow_html=True)
-    col3.markdown(f'**<u><div style="text-align: center;">Personification</div></u>**', unsafe_allow_html=True)
-    col5.markdown(f'**<u><div style="text-align: center;">AI Art</div></u>**', unsafe_allow_html=True)
-    col7.markdown(f'**<u><div style="text-align: center;">Where to Listen</div></u>**', unsafe_allow_html=True)
+    column_sizing = [4,1,4,1,4,1,4]
+    col0,col01, col1, col2, col3, col4, col5 = st.columns(column_sizing)
+    
+    col1.markdown(f'**<u><div style="text-align: center;">Dall-E Generation (based on Themes)</div></u>**', unsafe_allow_html=True)
+    col0.markdown(f'**<u><div style="text-align: center;">Album Art</div></u>**', unsafe_allow_html=True)
+    col3.markdown(f'**<u><div style="text-align: center;">Common Themes</div></u>**', unsafe_allow_html=True)
+    col5.markdown(f'**<u><div style="text-align: center;">Ideal Listening Location</div></u>**', unsafe_allow_html=True)
+#     col7.markdown(f'**<u><div style="text-align: center;">Where to Listen</div></u>**', unsafe_allow_html=True)
 
     for album in albums['album'].unique():
-        col0,col01, col1, col2, col3, col4, col5, col6, col7 = st.columns(column_sizing)
+        col0,col01, col1, col2, col3, col4, col5 = st.columns(column_sizing)
 
         theme = albums_dalle[albums_dalle['album']==album]['album_theme'].item()
         theme = theme.replace(".","")
 #         theme = theme.replace(",","\n")
         
-        col0.write("")
-        col0.write("")
-        col0.write("")
-        col0.write("")
-        col0.markdown(f'<div style="text-align: center;">{theme}</div>', unsafe_allow_html=True)
+        col3.write("")
+        col3.write("")
+        col3.write("")
+        col3.write("")
+        col3.write("")
+        col3.write("")
+        col3.markdown(f'<div style="text-align: center;">{theme}</div>', unsafe_allow_html=True)
         
-        col1.image(albums[albums['album']==album]['art'].item(), caption = album)
+        col0.image(albums[albums['album']==album]['art'].item(), caption = album)
 
-        matching = [s for s in persona_file_paths if album in s]
-        if len(matching) != 1:
-            matching = matching[1]
-        col3.image(matching, caption = album)
+#         matching = [s for s in ai_img_file_paths if album in s]
+#         if len(matching) != 1:
+#             matching = matching[1]
 
-        matching = [s for s in ai_img_file_paths if album in s]
+        if album == 'GO:OD AM ':
+            matching = [ai_img_file_paths[5]]
+        else:
+            matching = [s for s in ai_img_file_paths if album in s]
+
         if len(matching) != 1:
-            matching = matching[1]
-        col5.image(matching, caption = album)
+            matching = [matching[1]]
+            
+        matching = matching[0]
+
+    
+        col1.image(matching, caption = album)
+
+#         matching = [s for s in ai_img_file_paths if album in s]
+#         if len(matching) != 1:
+#             matching = matching[1]
+#         col7.image(matching, caption = album)
 
         listening_place = albums_dalle[albums_dalle['album']==album]['album_summary'].item()
         listening_place = listening_place.replace("The ideal place to listen to this record would be: ","")
         listening_place = listening_place.replace(".","")
 
-        col7.write("")
-        col7.write("")
-        col7.write("")
-        col7.write("")
-        col7.markdown(f'<div style="text-align: center;">{listening_place}</div>', unsafe_allow_html=True)
+        col5.write("")
+        col5.write("")
+        col5.write("")
+        col5.write("")
+        col5.write("")
+        col5.write("")
+        col5.markdown(f'<div style="text-align: center;">{listening_place}</div>', unsafe_allow_html=True)
         
 def by_album_chart(songs, option):
 #     option = 'K.I.D.S.'
@@ -260,7 +290,7 @@ def by_album_chart(songs, option):
     
 ####
 def death_mentions(albums, songs, album_death_counter):
-    caption = '''The trend you can see here is what prompted me to start this analysis. Mac Miller gained fans by being real about his own ups and downs with coming of age, drugs and depression in his music. As we go deeper into the analysis, we'll see how the vibe in his songs changed over time, especially when it comes to talking about death. At first, death mentions are minimal, but then it becomes a major theme. Eventually, you'll see that trend fading away, and the mood getting more positive again.'''
+    caption = '''The evolution seen here is what sparked my interest in this analysis. Mac Miller initially entered the music scene with a cheerful, carefree demeanor and a love for life. However, as he matured, he openly grappled with existential challenges, including substance abuse, depression, and the search for meaning. We'll observe a notable shift in the tone of his music over time, particularly concerning discussions of mortality. Initially scarce, references to death gradually became a central theme. Yet, as we progress, you'll notice this trend wane, giving way to a resurgence of positivity in his work up until his death.'''
     
     num_songs = songs.groupby(['album']).agg(num_songs = ("track_no","max")).reset_index()
     death_adj = album_death_counter.merge(num_songs)
