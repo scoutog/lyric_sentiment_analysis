@@ -10,7 +10,7 @@ persona_file_paths, ai_img_file_paths = generate_file_paths()
 option = 'Mac Miller'
 st.header("Mac Miller's Musical Evolution")
 st.write(f"A Data-Driven Exploration of Changing Sentiment Across his Discography")
-st.caption("Scout Oatman-Gaitan") #Powered by GPT-3.5 and Streamlit
+st.caption("Powered by GPT-3.5 and Streamlit")
 # album_banner(albums)
 
 # Show discography within a container
@@ -66,5 +66,6 @@ st.write(" ")
 linkedin = "https://www.linkedin.com/in/scout-og/"
 github = "https://github.com/scoutog"
     
-st.link_button("My LinkedIn", linkedin)
-st.link_button("My GitHub", github)
+st.markdown("My name is Scout. Check out my [LinkedIn](https://www.linkedin.com/in/scout-og/) and my [Github](https://github.com/scoutog)")
+# st.link_button("My LinkedIn", linkedin)
+# st.link_button("My GitHub", github)
